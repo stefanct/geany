@@ -3022,6 +3022,8 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 gboolean document_ensure_uptodate(GeanyDocument *doc, gboolean force_check, gboolean ignore_changes)
 {
 	FileDiskStatus old_status;
+
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 	switch(document_check_disk_status(doc, force_check))
 	{
 		case GEANY_FILE_DELETED:
@@ -3068,7 +3070,7 @@ GEANY_FILE_STATE document_check_disk_status(GeanyDocument *doc, gboolean force)
 	struct stat st;
 	gchar *locale_filename;
 
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(doc != NULL, GEANY_FILE_UNCHANGED);
 
 	/* ignore remote files and documents that have never been saved to disk */
 	if (notebook_switch_in_progress() || file_prefs.disk_check_timeout == 0
